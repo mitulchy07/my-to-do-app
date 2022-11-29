@@ -17,7 +17,7 @@ function TodoList() {
   };
 
   const updateTodo = (todoId, newValue) => {
-    if (!newValue.text || /^\s*$/.test(newValue.text)) {
+    if ((!newValue.text && !newValue.date) || /^\s*$/.test(newValue.text)) {
       return;
     }
 
@@ -28,8 +28,8 @@ function TodoList() {
 
   const removeTodo = (id) => {
     const removedArr = [...todos].filter((todo) => todo.id !== id);
-
     setTodos(removedArr);
+    console.log('Delete', id);
   };
 
   const completeTodo = (id) => {
@@ -40,17 +40,29 @@ function TodoList() {
       return todo;
     });
     setTodos(updatedTodos);
+    console.log(updatedTodos);
+  };
+  const priorityTodo = (id) => {
+    let updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.isImportant = !todo.isImportant;
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
+    console.log(updatedTodos);
   };
 
   return (
     <>
-      <h1>What's the Plan for Today?</h1>
+      <h1 className='text-xl font-bold my-2'>What's the Plan for Today?</h1>
       <TodoForm onSubmit={addTodo} />
       <Todo
         todos={todos}
         completeTodo={completeTodo}
         removeTodo={removeTodo}
         updateTodo={updateTodo}
+        priorityTodo={priorityTodo}
       />
     </>
   );
